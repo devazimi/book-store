@@ -1,15 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
-
-export interface Params {
-  params: Promise<{ id: string }>;
-}
+import { Params } from "@/types/propsType/type";
 
 export async function GET(req: NextRequest, { params }: Params) {
   try {
     const { id } = await params;
-    const filePath = path.join(process.cwd(), "bookPersian.json");
+    const filePath = path.join(process.cwd(), "booksPersian.json");
     const fileContent = await fs.readFile(filePath, "utf-8");
     const data = JSON.parse(fileContent);
 

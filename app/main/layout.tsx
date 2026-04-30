@@ -52,7 +52,7 @@ export default function HomePageLayout({
                 </h1>
               </div>
               <img
-                src="./bookImage2.jpg"
+                src="/images/bookImage2.jpg"
                 alt=""
                 className="object-cover w-2/3 h-full"
               />
