@@ -6,3 +6,14 @@
   --foreground: #171717;
 } */
 
+@theme {
+  --font-sans: var(--font-vazir);
+  /* --font-mono: "Fira Code", monospace; */
+}
+
+@utility hide-scrollbar {
+  scrollbar-width: none; 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

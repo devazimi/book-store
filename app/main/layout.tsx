@@ -26,7 +26,7 @@ export const genres: GenreType[] = [
   { id: 17, name_fa: "سفرنامه", name_en: "Travel" },
   { id: 18, name_fa: "کمیک", name_en: "Comic" },
   { id: 19, name_fa: "درام", name_en: "Drama" },
-  { id: 20, name_fa: "ادبیات کلاسیک", name_en: "Classic" }
+  { id: 20, name_fa: "ادبیات کلاسیک", name_en: "Classic" },
 ];
 
 // components/HomePageLayout.tsx
@@ -39,36 +39,23 @@ export default function HomePageLayout({
     <html lang="en">
       <body className="min-h-screen bg-gray-50">
         <div className="flex flex-col md:flex-row min-h-screen">
-          {/* Sidebar */}
-          <aside className="w-full md:w-64 lg:w-72 bg-white shadow-md p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200">
-            <h1 className="text-xl font-bold text-gray-800 mb-4 md:mb-6 pb-2 border-b-2 border-blue-500">
-              GENRES
-            </h1>
-            <nav className="space-y-1 md:space-y-2 max-h-[60vh] md:max-h-[80vh] overflow-y-auto">
-              {genres.map((item: GenreType) => (
-                <div
-                  key={item.id}
-                  className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors duration-200 group"
-                >
-                  <span className="text-gray-700 group-hover:text-blue-600 text-sm md:text-base">
-                    {item.name_en}
-                  </span>
-                </div>
-              ))}
-            </nav>
-          </aside>
-
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-screen">
-            {/* Header */}
-            <header className="w-full py-6 md:py-8 px-4 md:px-6">
-              <div className="flex items-center justify-center">
-                <h1 className="text-gray-800 font-black text-center
-                  text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl
-                  leading-tight tracking-tight">
-                  What Do You Want To Read?
+            <header className="flex flex-row w-full h-100 bg-[#4b7995] my-5 justify-between items-center p-10">
+              <div className="flex flex-col w-1/3 justify-center mx-auto gap-5 p-5 rounded-sm">
+                <h1 className="font-bold text-4xl text-white border-b-2">پَس‌جلد</h1>
+                <h1 className=" text-3xl text-white">
+                  داستان از اینجا شروع می‌شود،
+                </h1>
+                <h1 className=" text-2xl text-white">
+                  آنجا که سکوت تمام می‌شود.
                 </h1>
               </div>
+              <img
+                src="./bookImage2.jpg"
+                alt=""
+                className="object-cover w-2/3 h-full"
+              />
             </header>
 
             {/* Main Content Area */}
@@ -80,8 +67,7 @@ export default function HomePageLayout({
 
             {/* Optional Footer */}
             <footer className="w-full py-4 px-6 border-t border-gray-200 bg-white">
-              <p className="text-center text-gray-600 text-sm">
-              </p>
+              <p className="text-center text-gray-600 text-sm"></p>
             </footer>
           </div>
         </div>
