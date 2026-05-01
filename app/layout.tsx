@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "@/components/Layout/Navbar";
 
 const vazirmatn = localFont({
   src: "../public/fonts/Vazir.woff2", // فونت متغیر
@@ -15,7 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="rtl" className={vazirmatn.variable}>
-      <body className="bg-gray-100">{children}</body>
+      <body className="bg-gray-100">
+      <Navbar />
+        <div>{children}</div>
+      </body>
     </html>
   );
 }
