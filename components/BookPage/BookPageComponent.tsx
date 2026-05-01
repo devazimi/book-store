@@ -1,6 +1,10 @@
 import { BookPageProps } from "@/types/propsType/type";
 
 export default function BookPageComponent({ book }: BookPageProps) {
+    const toPersianNumber = (input: number | string) => {
+        return String(input).replace(/[0-9]/g, i => '۰۱۲۳۴۵۶۷۸۹'[i])
+    }
+
   return (
     <div className="w-full px-40">
       <div className="flex flex-row w-screen h-full py-20 gap-10">
@@ -51,7 +55,18 @@ export default function BookPageComponent({ book }: BookPageProps) {
             </div>
           </div>
         </div>
-        <div></div>
+        <div className="border-1 flex flex-col">
+                <div className="flex flex-row gap-5">
+                    <div className="flex flex-col justify-center items-center bg-gray-200 p-1 rounded-md gap-2">
+                        <h6 className="text-gray-500 text-sm">سال انتشار</h6>
+                        <p className="text-gray-600 font-bold text-sm">{toPersianNumber(book.published_date.slice(0,4))}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center bg-gray-200 p-1 rounded-md gap-2">
+                        <h6 className="text-gray-500 text-sm">تعداد صفحات</h6>
+                        <p className="text-gray-600 font-bold text-sm">{toPersianNumber(book.pages)}</p>
+                    </div>
+                </div>
+        </div>
       </div>
     </div>
   );
