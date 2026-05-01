@@ -41,7 +41,7 @@ export default function HomePageLayout({
         <div className="flex flex-col md:flex-row min-h-screen">
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-screen">
-            <header className="flex flex-row w-full h-100 bg-[#4b7995] my-5 justify-between items-center p-10">
+            {/* <header className="flex flex-row w-full h-100 bg-[#4b7995] my-5 justify-between items-center p-10">
               <div className="flex flex-col w-1/3 justify-center mx-auto gap-5 p-5 rounded-sm">
                 <h1 className="font-bold text-4xl text-white border-b-2">پَس‌جلد</h1>
                 <h1 className=" text-3xl text-white">
@@ -56,7 +56,7 @@ export default function HomePageLayout({
                 alt=""
                 className="object-cover w-2/3 h-full"
               />
-            </header>
+            </header> */}
 
             {/* Main Content Area */}
             <main className="flex-1 px-4 md:px-6 lg:px-8 pb-8">
