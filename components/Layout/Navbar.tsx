@@ -8,7 +8,7 @@ export default function Navbar() {
   const navItems = [
     { href: "/", label: "خانه" },
     { href: "/main", label: "کتاب ها" },
-    { href: "/#", label: "دسته بندی" },
+    { href: "/##", label: "دسته بندی" },
     { href: "/#", label: "پرفروش ها" },
   ];
 
