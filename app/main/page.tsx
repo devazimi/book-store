@@ -1,5 +1,4 @@
 import MainPageComponent from "@/components/HomePage/MainPageComponent";
-import { BookType } from "@/types/bookType/type";
 
 async function getBooks() {
   try {
