@@ -1,69 +1,64 @@
 "use client";
+
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { z } from "zod";
 
-const zodFormSchema = z
-  .object({
-    username: z.string().min(5, "نام کاربری باید حداقل 5 حرف باشد"),
-    email: z.string().email("فرمت ایمیل نا معتبر است"),
-    password: z.string().min(8, "پسورد باید حداقل 8 حرف باشد"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.confirmPassword === data.password, {
-    message: "پسورد صحیح نمی باشد",
-    path: ["confirmPassword"],
-  });
+const zodSchema = z.object({
+  username: z.string(),
+  email: z.string().email("فرمت ایمیل صحیح نمی باشد"),
+  password: z.string(),
+});
 
-export default function SignUpPage() {
+export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered");
+  const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const router = useRouter();
-
-  const registerUser = async (e: React.FormEvent) => {
+  const loginHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setErrors({});
 
-    const body = { username, email, password, confirmPassword };
-
-    const parsed = zodFormSchema.safeParse(body);
-
-    if (!parsed.success) {
-      console.log("parsed error: ", parsed.error.flatten());
-      const feildErrors: Record<string, string> = {};
-      parsed.error.issues.forEach((issue) => {
-        const field = issue.path[0] as string;
-        feildErrors[field] = issue.message;
-      });
-      setErrors(feildErrors);
-      return;
-    }
-
     try {
-      const res = await fetch(`/api/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
+      const body = { username, email, password };
 
-      if (!res.ok) {
-        console.log("error at try@");
-        throw new Error("fetching data failed");
+      const parsed = zodSchema.safeParse(body);
+
+      if (parsed.error) {
+        console.log("parsed error");
+        const fieldErrors: Record<string, string> = {};
+        parsed.error.issues.forEach((issue) => {
+          const field = issue.path[0] as string;
+          fieldErrors[field] = issue.message;
+        });
+
+        return setErrors(fieldErrors);
       }
 
-      const data = await res.json();
-      console.log("data: ", data);
+      const fetchUser = await signIn("credentials", {
+        username,
+        email,
+        password,
+        redirect: false,
+      });
 
-      router.push("/login?registered=true");
-      return data;
+      if (fetchUser?.error) {
+        console.log("error: ", fetchUser?.error);
+        throw new Error("error here")
+      }
+
+      if (fetchUser?.ok) {
+        router.push("/main");
+      }
     } catch (err) {
-      console.log("error: ", err);
-      console.error("error: ", err);
+      console.error("error login user: ", err);
     }
   };
 
@@ -72,11 +67,16 @@ export default function SignUpPage() {
     <div className="flex min-w-screen w-full p-4 justify-center items-center">
       {/* form */}
       <form
-        onSubmit={registerUser}
+        onSubmit={loginHandler}
         className="flex w-full max-w-md flex-col bg-white gap-5 rounded-2xl bg-white p-8 shadow-lg "
       >
+        {registered && (
+          <h1 className="text-center text-md font-bold text-gray-500">
+            ثبت نام با موفقیت انجام شد ✅
+          </h1>
+        )}
         <h1 className="text-center text-md font-bold text-gray-500 mb-5">
-          حساب خود را ایجاد کنید
+          لطفا وارد شوید
         </h1>
         {/* input */}
         <input
@@ -150,39 +150,14 @@ export default function SignUpPage() {
         {errors.password && (
           <p className="text-red-500 text-xs text-right">{errors.password}</p>
         )}
-        {/* input */}
-        <input
-          className={`w-full border rounded-xl px-4 py-3 text-right transition-colors
-              focus:outline-none focus:border-[#4b7995] focus:ring-2 focus:ring-[#4b7995]/20 
-              ${errors.confirmPassword ? `border-red-200` : `border-gray-300`}
-              `}
-          aria-label="confirmPassword"
-          placeholder="تکرار کلمه عبور..."
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            if (errors.confirmPassword) {
-              setErrors((prev) => {
-                const newErrors = { ...prev };
-                delete newErrors.confirmPassword;
-                return newErrors;
-              });
-            }
-          }}
-          required
-        />
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-xs text-right">
-            {errors.confirmPassword}
-          </p>
-        )}
+
         {/* button */}
         <button
           type="submit"
           className="mt-2 w-full py-3 bg-[#4b7995] text-white rounded-xl transition-colors 
           hover:bg-[#3a6178] focus:ring-2 focus:ring-gray-[#4b7995]/50 focus:outline-none cursor-pointer"
         >
-          ثبت نام
+          ورود
         </button>
       </form>
     </div>
