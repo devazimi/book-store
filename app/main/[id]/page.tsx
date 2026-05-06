@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import BookPageComponent from "@/components/BookPage/BookPageComponent";
 import { Params } from "@/types/propsType/type";
 
@@ -16,6 +18,12 @@ export async function generateMetadata({ params }: Params) {
 }
 
 export default async function BookPage({ params }: Params) {
+  const session = await getServerSession(authOptions);
+
+  const user = session?.user;
+
+  console.log('user: ', user)
+
   let book;
   try {
     const { id } = await params;
@@ -39,5 +47,5 @@ export default async function BookPage({ params }: Params) {
     throw new Error("something went wrong");
   }
 
-  return <BookPageComponent book={book} />;
+  return <BookPageComponent book={book} user={user} />;
 }

@@ -4,6 +4,13 @@ export interface Params {
   params: Promise<{ id: string }>;
 }
 
-export interface BookPageProps{
-    book: BookType;
+interface userSession {
+  id: string;
+  email: string;
+  username: string;
+}
+
+export interface BookPageProps {
+  book: BookType;
+  user: userSession | undefined;
 }

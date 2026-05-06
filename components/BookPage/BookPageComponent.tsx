@@ -1,6 +1,6 @@
 import { BookPageProps } from "@/types/propsType/type";
 
-export default function BookPageComponent({ book }: BookPageProps) {
+export default function BookPageComponent({ book, user }: BookPageProps) {
   const toPersianNumber = (input: number | string) => {
     return String(input).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
   };
@@ -114,7 +114,7 @@ export default function BookPageComponent({ book }: BookPageProps) {
         </p>
       </div>
       <button className="w-full h-12 text-white bg-blue-600 rounded-4xl hover:bg-green-800 hover:cursor-pointer transition-all">
-        خرید کتاب
+       {user ? ('افزودن به سبد خرید') : ('ابتدا وارد شوید')}
       </button>
     </div>
   </div>
