@@ -1,14 +1,18 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function addToCart(bookId: string) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
     throw new Error("لطفا اول وارد شوید");
   }
+
+  console.log(session?.user?.id);
 
   let cart = await prisma.cart.findUnique({
     where: {
@@ -22,7 +26,7 @@ export async function addToCart(bookId: string) {
     });
   }
 
-  const cartItem = await prisma.cartItem.findUnique({
+  let cartItem = await prisma.cartItem.findUnique({
     where: {
       cartId_bookId: {
         cartId: cart.id,
@@ -32,17 +36,18 @@ export async function addToCart(bookId: string) {
   });
 
   if (cartItem) {
-    await prisma.cartItem.update({
+   cartItem = await prisma.cartItem.update({
       where: { id: cartItem.id },
       data: { quantity: cartItem.quantity + 1 },
     });
   }
 
   if (!cartItem) {
-    await prisma.cartItem.create({
+    cartItem = await prisma.cartItem.create({
       data: { cartId: cart.id, bookId: bookId, quantity: 1 },
     });
   }
 
+  revalidatePath(`/main/${bookId}`)
   return { success: true };
 }

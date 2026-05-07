@@ -1,4 +1,5 @@
 import { BookPageProps } from "@/types/propsType/type";
+import { AddToCartButton } from "./AddToCartButton";
 
 export default function BookPageComponent({ book, user }: BookPageProps) {
   const toPersianNumber = (input: number | string) => {
@@ -113,9 +114,7 @@ export default function BookPageComponent({ book, user }: BookPageProps) {
           <span className="text-sm font-thin text-gray-700">تومان</span>
         </p>
       </div>
-      <button className="w-full h-12 text-white bg-blue-600 rounded-4xl hover:bg-green-800 hover:cursor-pointer transition-all">
-       {user ? ('افزودن به سبد خرید') : ('ابتدا وارد شوید')}
-      </button>
+      <AddToCartButton bookId={book.id} />
     </div>
   </div>
 );

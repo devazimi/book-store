@@ -31,7 +31,7 @@ model Cart {
 
 model CartItem {
   id        String   @id @default(cuid())
-  cartId    String   @unique
+  cartId    String   
   bookId    String
   quantity  Int      @default(1)
 
