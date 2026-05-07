@@ -61,10 +61,17 @@ export async function getCart() {
   try {
     const session = await getServerSession(authOptions);
 
+    if(!session?.user.id){
+      throw new Error('کاربر وجود ندارد')
+    }
+
     console.log(session?.user.id);
 
     const cart = await prisma.cart.findUnique({
       where: { userId: session?.user.id },
+      include: {
+        items: true,
+      },
     });
 
     if (!cart) {
