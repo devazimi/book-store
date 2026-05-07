@@ -1,5 +1,11 @@
 import MainPageComponent from "@/components/HomePage/MainPageComponent";
 
+export async function generateMetadata(){
+  return {
+    title: "کتاب ها",
+  };
+}
+
 async function getBooks() {
   try {
     const baseUrl = process.env.base_url;
