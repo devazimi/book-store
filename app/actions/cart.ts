@@ -61,8 +61,8 @@ export async function getCart() {
   try {
     const session = await getServerSession(authOptions);
 
-    if(!session?.user.id){
-      throw new Error('کاربر وجود ندارد')
+    if (!session?.user.id) {
+      throw new Error("کاربر وجود ندارد");
     }
 
     console.log(session?.user.id);
@@ -82,5 +82,48 @@ export async function getCart() {
   } catch (err) {
     console.log("خطا در دریافت سبد خرید: ", err);
     console.error("get cart err: ", err);
+  }
+}
+
+export async function incrementQuantity(bookId: string) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user.id) {
+      throw new Error("کاربر وجود ندارد");
+    }
+
+    const cart = await prisma.cart.findUnique({
+      where: { userId: session.user.id },
+    });
+
+    if (!cart) {
+      throw new Error("سبد خرید ایجاد نشده است");
+    }
+
+    const cartItem = await prisma.cartItem.findUnique({
+      where: {
+        cartId_bookId: {
+          cartId: cart.id,
+          bookId: bookId,
+        },
+      },
+    });
+
+    if (!cartItem) {
+      throw new Error("ایتم وجود ندارد");
+    }
+
+    const quantityUpdate = await prisma.cartItem.update({
+      where: {
+        id: cartItem.id,
+      },
+      data: { quantity: cartItem.quantity + 1 },
+    });
+
+    revalidatePath('/cart')
+    return { success: true, quantityUpdate };
+  } catch (err) {
+    console.error("error update quantity: ", err);
   }
 }
