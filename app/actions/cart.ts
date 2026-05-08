@@ -122,44 +122,49 @@ export async function incrementQuantity(bookId: string) {
       data: { quantity: cartItem.quantity + 1 },
     });
 
-    revalidatePath('/cart')
+    revalidatePath("/cart");
     return { success: true, quantityUpdate };
   } catch (err) {
     console.error("error update quantity: ", err);
   }
 }
 
-export async function decrementQuantity(bookId: string){
-  try{
+export async function decrementQuantity(bookId: string) {
+  try {
     const session = await getServerSession(authOptions);
 
-    if(!session?.user.id){
-      throw new Error('کاربر وجود ندارد')
+    if (!session?.user.id) {
+      throw new Error("کاربر وجود ندارد");
     }
 
-    const cart = await prisma.cart.findUnique({where: {userId: session.user.id}})
+    const cart = await prisma.cart.findUnique({
+      where: { userId: session.user.id },
+    });
 
-    if(!cart){
-      throw new Error('سبد خرید ایجاد نشده است')
+    if (!cart) {
+      throw new Error("سبد خرید ایجاد نشده است");
     }
 
-    const cartItem = await prisma.cartItem.findUnique({where: {cartId_bookId: {cartId: cart.id, bookId: bookId}}})
+    const cartItem = await prisma.cartItem.findUnique({
+      where: { cartId_bookId: { cartId: cart.id, bookId: bookId } },
+    });
 
-    if(!cartItem){
-      throw new Error('ایتم وجود ندارد');
+    if (!cartItem) {
+      throw new Error("ایتم وجود ندارد");
     }
 
-    const quantityUpdate = await prisma.cartItem.update({where: {id: cartItem.id}, data: {quantity: cartItem.quantity - 1}})
+    const quantityUpdate = await prisma.cartItem.update({
+      where: { id: cartItem.id },
+      data: { quantity: cartItem.quantity - 1 },
+    });
 
-    if(quantityUpdate.quantity === 0){
-      await prisma.cartItem.delete({where: {id: cartItem.id}})
+    if (quantityUpdate.quantity === 0) {
+      await prisma.cartItem.delete({ where: { id: cartItem.id } });
     }
 
-    revalidatePath('/cart')
-    return{success: true, quantityUpdate}
-  }catch(err){
-    console.error('error update quantity: ', err)
+    revalidatePath("/cart");
+    return { success: true, quantityUpdate };
+  } catch (err) {
+    console.error("error update quantity: ", err);
   }
-
-
 }

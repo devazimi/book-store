@@ -4,11 +4,18 @@ import { decrementQuantity, incrementQuantity } from "@/app/actions/cart";
 import { BookType } from "@/types/bookType/type";
 
 export default function CartPageComponent({ cartItems, cartData }) {
+  const cartPrice = cartItems?.reduce(
+    (sum: number, item: BookType) => sum + item.price,
+    0,
+  );
+  // const cartPrice = cartItems.price;
+  // console.log('cartPrice', cartPrice)
+
   return (
     // container
-    <div className="max-w-screen w-full flex mx-auto justify-center lg:flex-row md:flex-row sm:flex-col flex-col my-10">
+    <div className="max-w-screen w-[1200px] flex mx-auto justify-between lg:flex-row md:flex-row sm:flex-col flex-col m-10">
       {/* items box */}
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 justify-center items-center">
         {cartItems.map((item: BookType) => {
           const validItem = cartData.data.items.find(
             (q) => q.bookId === item.id,
@@ -16,7 +23,7 @@ export default function CartPageComponent({ cartItems, cartData }) {
           const itemQuantity = validItem.quantity;
 
           return (
-            <div key={item.id} className="flex flex-row gap-5 border-1 p-7">
+            <div key={item.id} className="flex flex-row gap-5 border-1 p-6">
               <div className="flex flex-col gap-10 justify-center items-center">
                 <img
                   src={"/images/bookImage3.jpg"}
@@ -24,23 +31,56 @@ export default function CartPageComponent({ cartItems, cartData }) {
                 />
                 {/* quantity */}
                 <div className="flex flex-row border-2 border-gray-300 rounded-lg gap-5 justify-center p-3">
-                  <button onClick={() => incrementQuantity(item.id)} className="text-sm">➕</button>
+                  <button
+                    onClick={() => incrementQuantity(item.id)}
+                    className="text-sm"
+                  >
+                    ➕
+                  </button>
                   <p className="text-sm">{itemQuantity || 1}</p>
-                  <button onClick={() => decrementQuantity(item.id)} className="text-sm">🗑️</button>
+                  <button
+                    onClick={() => decrementQuantity(item.id)}
+                    className="text-sm"
+                  >
+                    🗑️
+                  </button>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <h1 className="text-gray-800 mb-3">کتاب {item.title}</h1>
-                <p className="text-gray-500 text-xs ">
+                <h1 className="font-bold text-gray-800 mb-3">
+                  کتاب {item.title}
+                </h1>
+                <p className="text-gray-500 text-[11px] sm:text-xs md:text-xs lg:text-xs xl:text-xs">
                   🛡️ گارانتی اصالت و سلامت فیزیکی کالا
                 </p>
-                <p className="text-gray-500 text-xs ">📚 {item.publisher}</p>
-                <p className="text-gray-500 text-xs ">🚚 ارسال پس جلد</p>
-                <p className="text-gray-500 text-xl ">{item.price} تومان</p>
+                <p className="text-gray-500 text-[11px] sm:text-xs md:text-xs lg:text-xs xl:text-xs">
+                  📚 {item.publisher}
+                </p>
+                <p className="text-gray-500 text-[11px] sm:text-xs md:text-xs lg:text-xs xl:text-xs">
+                  🚚 ارسال پس جلد
+                </p>
+                <p className="font-bold mt-8 text-lg">{item.price} تومان</p>
               </div>
             </div>
           );
         })}
+      </div>
+
+      {/* cart box */}
+      <div className="border flex flex-col p-5 mx-10 w-70 gap-8">
+        <div className="flex justify-between">
+          <p className="font-bold text-gray-500 text-sm">
+            قیمت کالاها {`(${cartItems.length})`}
+          </p>
+          <p className="font-bold text-gray-500 text-sm">{cartPrice} تومان</p>
+        </div>
+        <div className="flex justify-between">
+          <p className="font-bold text-gray-700 text-sm">جمع سبد خرید</p>
+          <p className="font-bold text-gray-700 text-sm">{cartPrice} تومان</p>
+        </div>
+        <button className="w-full h-12 bg-red-600 text-white rounded-lg">
+          تایید و تکمیل سفارش
+        </button>
       </div>
     </div>
   );
