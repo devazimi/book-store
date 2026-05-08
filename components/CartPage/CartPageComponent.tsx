@@ -1,6 +1,6 @@
 "use client";
 
-import { incrementQuantity } from "@/app/actions/cart";
+import { decrementQuantity, incrementQuantity } from "@/app/actions/cart";
 import { BookType } from "@/types/bookType/type";
 
 export default function CartPageComponent({ cartItems, cartData }) {
@@ -26,7 +26,7 @@ export default function CartPageComponent({ cartItems, cartData }) {
                 <div className="flex flex-row border-2 border-gray-300 rounded-lg gap-5 justify-center p-3">
                   <button onClick={() => incrementQuantity(item.id)} className="text-sm">➕</button>
                   <p className="text-sm">{itemQuantity || 1}</p>
-                  <button className="text-sm">🗑️</button>
+                  <button onClick={() => decrementQuantity(item.id)} className="text-sm">🗑️</button>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
