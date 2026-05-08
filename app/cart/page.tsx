@@ -1,4 +1,5 @@
 import { getCart } from "../actions/cart";
+import CartPageComponent from "@/components/CartPage/CartPageComponent";
 
 export default async function getCartData() {
   const cartData = await getCart();
@@ -6,8 +7,8 @@ export default async function getCartData() {
   console.log("cart data : ", cartData?.data);
   console.log("cart data2: ", cartData?.data.items);
 
-  if(!cartData){
-    return <>no cart found</>
+  if (!cartData) {
+    return <>no cart found</>;
   }
 
   const cartItemsWithBooks = await Promise.all(
@@ -26,15 +27,10 @@ export default async function getCartData() {
     }),
   );
 
-  console.log('cart items: ',cartItemsWithBooks)
+  console.log("cart items: ", cartItemsWithBooks);
+  console.log('quantity: ', cartData.data.items.map(q => q.quantity))
 
-  return(
-    <div>
-        {cartItemsWithBooks.map((item) => (
-            <div key={item.id}>
-                {item.title}
-            </div>
-        ))}
-    </div>
+  return (
+    <CartPageComponent cartItems={cartItemsWithBooks} cartData={cartData} />
   );
 }
