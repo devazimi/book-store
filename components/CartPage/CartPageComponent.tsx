@@ -1,15 +1,18 @@
 "use client";
 
 import { decrementQuantity, incrementQuantity } from "@/app/actions/cart";
+import { useLogic } from "@/hooks/useLogic";
 import { BookType } from "@/types/bookType/type";
 
 export default function CartPageComponent({ cartItems, cartData }) {
-  const cartPrice = cartItems?.reduce(
+  const {dollarToToman} = useLogic();
+
+  const cartPriceDollar = cartItems?.reduce(
     (sum: number, item: BookType) => sum + item.price,
     0,
   );
-  // const cartPrice = cartItems.price;
-  // console.log('cartPrice', cartPrice)
+  
+  const cartPriceToman = dollarToToman(cartPriceDollar);
 
   return (
     // container
@@ -21,6 +24,8 @@ export default function CartPageComponent({ cartItems, cartData }) {
             (q) => q.bookId === item.id,
           );
           const itemQuantity = validItem.quantity;
+
+          const priceToToman = dollarToToman(item.price)
 
           return (
             <div key={item.id} className="flex flex-row gap-5 border-1 p-6">
@@ -59,7 +64,7 @@ export default function CartPageComponent({ cartItems, cartData }) {
                 <p className="text-gray-500 text-[11px] sm:text-xs md:text-xs lg:text-xs xl:text-xs">
                   🚚 ارسال پس جلد
                 </p>
-                <p className="font-bold mt-8 text-lg">{item.price} تومان</p>
+                <p className="font-bold mt-8 text-lg">{priceToToman} تومان</p>
               </div>
             </div>
           );
@@ -72,11 +77,11 @@ export default function CartPageComponent({ cartItems, cartData }) {
           <p className="font-bold text-gray-500 text-sm">
             قیمت کالاها {`(${cartItems.length})`}
           </p>
-          <p className="font-bold text-gray-500 text-sm">{cartPrice} تومان</p>
+          <p className="font-bold text-gray-500 text-sm">{cartPriceToman} تومان</p>
         </div>
         <div className="flex justify-between">
           <p className="font-bold text-gray-700 text-sm">جمع سبد خرید</p>
-          <p className="font-bold text-gray-700 text-sm">{cartPrice} تومان</p>
+          <p className="font-bold text-gray-700 text-sm">{cartPriceToman} تومان</p>
         </div>
         <button className="w-full h-12 bg-red-600 text-white rounded-lg">
           تایید و تکمیل سفارش

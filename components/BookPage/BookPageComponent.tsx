@@ -1,30 +1,11 @@
 import { BookPageProps } from "@/types/propsType/type";
 import { AddToCartButton } from "./AddToCartButton";
+import { useLogic } from "@/hooks/useLogic";
 
 export default function BookPageComponent({ book, user }: BookPageProps) {
-  const toPersianNumber = (input: number | string) => {
-    return String(input).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
-  };
+  const {dollarToToman, toPersianNumber} = useLogic();
 
-  const formatPrice = (input: number) => {
-    const parts = input.toString().split(".");
-
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-    return parts.join(".");
-  };
-
-  const dollarToToman = (input: number) => {
-    let tomanAmount = input * 180000;
-
-    tomanAmount = Math.round(tomanAmount);
-
-    const formatted = formatPrice(tomanAmount);
-
-    const persianFormatted = toPersianNumber(formatted);
-
-    return persianFormatted;
-  };
+  const priceToToman = dollarToToman(book.price);
 
   return (
   <div className="flex flex-wrap w-full max-w-7xl mx-auto py-6 md:py-10 px-4 md:px-6 gap-6 md:gap-10">
@@ -110,7 +91,7 @@ export default function BookPageComponent({ book, user }: BookPageProps) {
       <div className="flex flex-row justify-between items-center">
         <h6 className="text-gray-600 text-base md:text-lg">قیمت :</h6>
         <p className="text-gray-800 font-bold text-lg md:text-xl">
-          {dollarToToman(book.price)}{" "}
+          {priceToToman}{" "}
           <span className="text-sm font-thin text-gray-700">تومان</span>
         </p>
       </div>
