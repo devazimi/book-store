@@ -46,12 +46,13 @@ export default function CartPageComponent({
           const itemPriceToman = dollarToToman(itemPriceDollar);
 
           return (
-            <div key={item.id} className="flex flex-row gap-5 p-6">
+            <div key={item.id} className="flex flex-row gap-5 p-6 border-b-1 border-gray-300">
               <div className="flex flex-col gap-10 justify-center items-center">
                 {
                   // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
                   <img
                     src={"/images/bookImage3.jpg"}
+                    // src={item.cover_image}
                     className="w-20 object-cover"
                   />
                 }
@@ -118,7 +119,7 @@ export default function CartPageComponent({
       </div>
 
       {/* cart box */}
-      <div className="flex flex-col p-8 lg:w-auto lg:min-w-80 md:w-auto md:min-w-80 w-full h-fit border-1 border-gray-300 rounded-xl gap-8 lg:sticky md:sticky top-60">
+      <div className="flex flex-col p-8 lg:w-auto lg:min-w-80 md:w-auto md:min-w-80 w-full h-fit border-1 border-gray-300 rounded-xl shadow-md gap-8 lg:sticky md:sticky top-60">
         <div className="flex justify-between">
           <p className="font-bold text-gray-500 text-sm">
             قیمت کالاها {`(${cartItems.length})`}
