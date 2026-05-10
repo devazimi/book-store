@@ -14,3 +14,19 @@ export interface BookPageProps {
   book: BookType;
   user: userSession | undefined;
 }
+
+interface CartDataItems {
+  id: string;
+  cartId: string;
+  bookId: string;
+  quantity: number;
+}
+
+export interface CartPageProps {
+  cartItems: BookType[];
+  cartData: {
+    data: {
+      items: CartDataItems[];
+    };
+  };
+}

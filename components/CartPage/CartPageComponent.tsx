@@ -3,40 +3,66 @@
 import { decrementQuantity, incrementQuantity } from "@/app/actions/cart";
 import { useLogic } from "@/hooks/useLogic";
 import { BookType } from "@/types/bookType/type";
+import { CartPageProps } from "@/types/propsType/type";
 
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { FiBookOpen, FiSend, FiShield } from "react-icons/fi";
 
-export default function CartPageComponent({ cartItems, cartData }) {
-  const { dollarToToman } = useLogic();
+export default function CartPageComponent({
+  cartItems,
+  cartData,
+}: CartPageProps) {
+  const { dollarToToman, toPersianNumber } = useLogic();
 
-  const cartPriceDollar = cartItems?.reduce(
-    (sum: number, item: BookType) => sum + item.price,
-    0,
-  );
+  const cartPriceDollar = cartItems.reduce((sum: number, item: BookType) => {
+    const validItem = cartData.data.items.find((c) => c.bookId === item.id);
+    if (!validItem) return sum;
+    const itemPrice = item.price * validItem.quantity;
+    return sum + itemPrice;
+  }, 0);
 
   const cartPriceToman = dollarToToman(cartPriceDollar);
 
   return (
     // container
-    <div className="max-w-screen w-[1200px] flex mx-auto justify-between lg:flex-row md:flex-row sm:flex-col flex-col m-10">
+    <div className="max-w-[900px] w-full flex flex-col sm:flex-col mx-auto justify-between lg:flex-row md:flex-row px-4 lg:px-0 m-10 gap-8">
       {/* items box */}
-      <div className="flex flex-col gap-10 justify-center items-center">
+      <div className="flex flex-col gap-10 justify-center  lg:w-2/3 md:w-2/3 w-full ">
+        <div className="flex flex-row gap-2 items-center self-start mr-0 ml-auto border-b-3 border-[#4b7995] p-2">
+          <h1 className=" text-[#4b7995] text-xl">سبد خرید</h1>
+          <h1 className=" text-white text-xl rounded-lg bg-[#4b7995] px-1">
+            {toPersianNumber(cartItems.length)}
+          </h1>
+        </div>
         {cartItems.map((item: BookType) => {
           const validItem = cartData.data.items.find(
             (q) => q.bookId === item.id,
           );
+          if (!validItem) {
+            return null;
+          }
           const itemQuantity = validItem.quantity;
-
-          const priceToToman = dollarToToman(item.price);
+          const itemPriceDollar = item.price * itemQuantity;
+          const itemPriceToman = dollarToToman(itemPriceDollar);
 
           return (
-            <div key={item.id} className="flex flex-row gap-5 border-1 p-6">
+            <div key={item.id} className="flex flex-row gap-5 p-6">
               <div className="flex flex-col gap-10 justify-center items-center">
-                <img
-                  src={"/images/bookImage3.jpg"}
-                  className="object-cover w-20"
-                />
+                {
+                  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+                  <img
+                    src={"/images/bookImage3.jpg"}
+                    className="w-20 object-cover"
+                  />
+                }
+                {/* <div className="relative w-20 h-30">
+                  <Image
+                    src="/images/bookImage3.jpg"
+                    fill
+                    style={{ objectFit: "cover", borderRadius: 2 }}
+                    alt="item image"
+                  />
+                </div> */}
                 {/* quantity */}
                 <div className="flex flex-row border-2 border-gray-300 rounded-lg gap-5 justify-center p-3">
                   <button
@@ -84,7 +110,7 @@ export default function CartPageComponent({ cartItems, cartData }) {
                     ارسال پس جلد
                   </p>
                 </div>
-                <p className="font-bold mt-8 text-lg">{priceToToman} تومان</p>
+                <p className="font-bold mt-8 text-lg">{itemPriceToman} تومان</p>
               </div>
             </div>
           );
@@ -92,7 +118,7 @@ export default function CartPageComponent({ cartItems, cartData }) {
       </div>
 
       {/* cart box */}
-      <div className="border flex flex-col p-5 mx-10 w-70 gap-8">
+      <div className="flex flex-col p-8 lg:w-auto lg:min-w-80 md:w-auto md:min-w-80 w-full h-fit border-1 border-gray-300 rounded-xl gap-8 lg:sticky md:sticky top-60">
         <div className="flex justify-between">
           <p className="font-bold text-gray-500 text-sm">
             قیمت کالاها {`(${cartItems.length})`}

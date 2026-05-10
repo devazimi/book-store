@@ -1,8 +1,8 @@
 export const useLogic = () => {
-    const toPersianNumber = (input: number | string) => {
+  const toPersianNumber = (input: number | string) => {
     return String(input).replace(/[0-9]/g, (d) => {
-        const digit = parseInt(d,10);
-        return "۰۱۲۳۴۵۶۷۸۹"[digit];
+      const digit = parseInt(d, 10);
+      return "۰۱۲۳۴۵۶۷۸۹"[digit];
     });
   };
 
@@ -26,5 +26,5 @@ export const useLogic = () => {
     return persianFormatted;
   };
 
-  return {dollarToToman, toPersianNumber};
-}
+  return { dollarToToman, toPersianNumber };
+};
