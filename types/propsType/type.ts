@@ -15,7 +15,7 @@ export interface BookPageProps {
   user: userSession | undefined;
 }
 
-interface CartDataItems {
+export interface CartDataItems {
   id: string;
   cartId: string;
   bookId: string;
@@ -29,4 +29,13 @@ export interface CartPageProps {
       items: CartDataItems[];
     };
   };
+}
+
+export interface NavbarProps {
+  cart:
+    | {
+        items: CartDataItems[];
+      }
+    | null
+    | undefined;
 }

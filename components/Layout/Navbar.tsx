@@ -1,8 +1,9 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { CartDataItems, NavbarProps } from "@/types/propsType/type";
 
-export default function Navbar() {
+export default function Navbar({ cart }: NavbarProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -11,6 +12,11 @@ export default function Navbar() {
     { href: "/##", label: "دسته بندی" },
     { href: "/#", label: "پرفروش ها" },
   ];
+
+  const cartLength = cart?.items.reduce(
+    (sum: number, item: CartDataItems) => sum + item.quantity,
+    0,
+  );
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
@@ -140,7 +146,7 @@ export default function Navbar() {
                   />
                 </svg>
                 <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[#4b7995] text-white text-[10px] rounded-full flex items-center justify-center font-medium">
-                  ۳
+                  {cartLength && cartLength}
                 </span>
               </button>
             </Link>
