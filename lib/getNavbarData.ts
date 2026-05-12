@@ -2,12 +2,12 @@ import { authOptions } from "./auth";
 import { prisma } from "./prisma";
 import { getServerSession } from "next-auth";
 
-export async function getCartdata() {
+export async function getNavbardata() {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      throw new Error("کاربر وارد نشده است");
+      return null;
     }
 
     const cart = await prisma.cart.findUnique({
@@ -20,10 +20,10 @@ export async function getCartdata() {
     });
 
     if (!cart) {
-      throw new Error("سبد خرید ایجاد نشده است");
+      return null;
     }
 
-    return cart;
+    return {cart, session};
   } catch (err) {
     console.error("خطا در دریافت اطلاعات: ", err);
     return null;

@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { CartDataItems, NavbarProps } from "@/types/propsType/type";
 
-export default function Navbar({ cart }: NavbarProps) {
+export default function Navbar({ data }: NavbarProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -13,10 +13,12 @@ export default function Navbar({ cart }: NavbarProps) {
     { href: "/#", label: "پرفروش ها" },
   ];
 
-  const cartLength = cart?.items.reduce(
+  const cartLength = data?.cart?.items.reduce(
     (sum: number, item: CartDataItems) => sum + item.quantity,
     0,
   );
+
+  const user = data?.session?.user;
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
@@ -166,7 +168,9 @@ export default function Navbar({ cart }: NavbarProps) {
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                 />
               </svg>
-              <span className="hidden lg:inline">ورود</span>
+              <span className="hidden lg:inline">
+                {user ? user.email : null}
+              </span>
             </button>
 
             {/* پروفایل موبایل */}

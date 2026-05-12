@@ -1,7 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Layout/Navbar";
-import { getCartdata } from "@/lib/getCartData";
+import { getNavbardata } from "@/lib/getNavbarData";
 
 const vazirmatn = localFont({
   src: "../public/fonts/Vazir.woff2",
@@ -14,12 +14,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cart = await getCartdata();
+  const data = await getNavbardata();
 
   return (
     <html lang="en" dir="rtl" className={vazirmatn.variable}>
       <body className="bg-gray-100">
-        <Navbar cart={cart} />
+        <Navbar data={data} />
         <div>{children}</div>
       </body>
     </html>

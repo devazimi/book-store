@@ -32,10 +32,12 @@ export interface CartPageProps {
 }
 
 export interface NavbarProps {
-  cart:
-    | {
-        items: CartDataItems[];
-      }
-    | null
-    | undefined;
+  data: {
+    cart: {
+      items: CartDataItems[];
+    } | null;
+    session: {
+      user: userSession;
+    } | null;
+  } | null;
 }
