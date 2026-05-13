@@ -7,7 +7,7 @@ export async function getNavbardata() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      return null;
+      return { cart: null, session: null };
     }
 
     const cart = await prisma.cart.findUnique({
@@ -20,10 +20,10 @@ export async function getNavbardata() {
     });
 
     if (!cart) {
-      return null;
+      return { cart: null, session };
     }
 
-    return {cart, session};
+    return { cart, session };
   } catch (err) {
     console.error("خطا در دریافت اطلاعات: ", err);
     return null;

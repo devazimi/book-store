@@ -1,10 +1,11 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CartDataItems, NavbarProps } from "@/types/propsType/type";
 
 export default function Navbar({ data }: NavbarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { href: "/", label: "خانه" },
@@ -114,7 +115,7 @@ export default function Navbar({ data }: NavbarProps) {
             </button>
 
             {/* علاقه‌مندی */}
-            <button className="hidden md:flex w-10 h-10 items-center justify-center rounded-xl hover:bg-gray-50 transition-colors relative">
+            {/* <button className="hidden md:flex w-10 h-10 items-center justify-center rounded-xl hover:bg-gray-50 transition-colors relative">
               <svg
                 className="w-5 h-5 text-gray-500"
                 fill="none"
@@ -129,11 +130,11 @@ export default function Navbar({ data }: NavbarProps) {
                 />
               </svg>
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#4b7995] rounded-full" />
-            </button>
+            </button> */}
 
             {/* سبد خرید */}
             <Link href={"/cart"}>
-              <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-50 transition-colors relative">
+              <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors relative">
                 <svg
                   className="w-5 h-5 text-gray-500"
                   fill="none"
@@ -148,13 +149,16 @@ export default function Navbar({ data }: NavbarProps) {
                   />
                 </svg>
                 <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[#4b7995] text-white text-[10px] rounded-full flex items-center justify-center font-medium">
-                  {cartLength && cartLength}
+                  {cartLength ? cartLength : 0}
                 </span>
               </button>
             </Link>
 
             {/* پروفایل دسکتاپ */}
-            <button className="hidden md:flex items-center gap-2 h-10 px-4 bg-[#4b7995] text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-medium">
+            <button
+              className="hidden md:flex items-center gap-2 h-10 px-4 bg-[#4b7995] text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-medium"
+              onClick={() => (user ? null : router.push("/login"))}
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -169,12 +173,15 @@ export default function Navbar({ data }: NavbarProps) {
                 />
               </svg>
               <span className="hidden lg:inline">
-                {user ? user.email : null}
+                {user ? user.username : "ورود"}
               </span>
             </button>
 
             {/* پروفایل موبایل */}
-            <button className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-[#4b7995] text-white">
+            <button
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-[#4b7995] text-white hover:bg-gray-800"
+              onClick={() => (user ? null : router.push("/login"))}
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
