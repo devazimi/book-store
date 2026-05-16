@@ -2,6 +2,8 @@
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CartDataItems, NavbarProps } from "@/types/propsType/type";
+import SearchBox from "./SearchBox";
+import SearchBoxMobile from "./SearchBoxMobile";
 
 export default function Navbar({ data }: NavbarProps) {
   const pathname = usePathname();
@@ -69,7 +71,7 @@ export default function Navbar({ data }: NavbarProps) {
           </div>
 
           {/* سرچ باکس */}
-          <div className="hidden sm:flex flex-1 max-w-md">
+          {/* <div className="hidden sm:flex flex-1 max-w-md">
             <div className="relative w-full">
               <svg
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -90,7 +92,8 @@ export default function Navbar({ data }: NavbarProps) {
                 className="w-full h-10 bg-gray-50 border border-gray-200 rounded-xl pr-10 pl-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white focus:ring-4 focus:ring-gray-50 transition-all"
               />
             </div>
-          </div>
+          </div> */}
+          <SearchBox />
 
           {/* اسپیسر برای موبایل */}
           <div className="flex-1 sm:hidden" />
@@ -98,7 +101,7 @@ export default function Navbar({ data }: NavbarProps) {
           {/* آیکون‌ها */}
           <div className="flex items-center gap-1 md:gap-2">
             {/* سرچ موبایل */}
-            <button className="sm:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-50 transition-colors">
+            {/* <button className="sm:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-50 transition-colors">
               <svg
                 className="w-5 h-5 text-gray-500"
                 fill="none"
@@ -112,7 +115,8 @@ export default function Navbar({ data }: NavbarProps) {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            </button>
+            </button> */}
+            <SearchBoxMobile />
 
             {/* علاقه‌مندی */}
             {/* <button className="hidden md:flex w-10 h-10 items-center justify-center rounded-xl hover:bg-gray-50 transition-colors relative">
