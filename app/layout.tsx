@@ -18,7 +18,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" dir="rtl" className={vazirmatn.variable}>
-      <body className="bg-gray-200">
+      <body className="bg-gray-300">
         <Navbar data={data} />
         <div>{children}</div>
       </body>

@@ -41,3 +41,7 @@ export interface NavbarProps {
     } | null;
   } | null;
 }
+
+export interface ProfileProps {
+  user: userSession | undefined;
+}

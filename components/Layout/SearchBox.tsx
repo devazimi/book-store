@@ -37,13 +37,8 @@ export default function SearchBox() {
 
   useEffect(() => {
     if (query.length < 2) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setResults([]);
-      setIsLoading(false);
       return;
     }
-
-    setIsLoading(true);
 
     const timer = setTimeout(async () => {
       try {
@@ -82,11 +77,19 @@ export default function SearchBox() {
           placeholder="جستجوی کتاب، نویسنده یا ناشر..."
           className="w-full h-10 bg-gray-50 border border-gray-200 rounded-xl pr-10 pl-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white focus:ring-4 focus:ring-gray-50 transition-all"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value.length < 2) {
+              setResults([]);
+              setIsLoading(false);
+            } else {
+              setIsLoading(true);
+            }
+          }}
           onClick={() => setSearchOpen(true)}
         />
         {showDropdown && (
-          <div className="absolute top-full w-full flex flex-col gap-5 bg-white rounded-2xl shadow-2xl p-5">
+          <div className="absolute top-full w-full flex flex-col gap-5 bg-white shadow-2xl p-5">
             {isLoading && (
               <div className="flex flex-row border-gray-200">
                 <h1 className="text-sm text-gray-400 font-bold">
