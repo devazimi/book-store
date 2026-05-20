@@ -25,7 +25,7 @@ export default function Navbar({ data }: NavbarProps) {
   const user = data?.session?.user;
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-white shadow-xl border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex items-center h-16 md:h-20 gap-4 md:gap-6 lg:gap-10">
           {/* Logo*/}
@@ -45,9 +45,9 @@ export default function Navbar({ data }: NavbarProps) {
                 />
               </svg>
             </div>
-            <span className="text-lg md:text-xl font-semibold text-gray-900 tracking-tight">
+            {/* <span className="text-lg md:text-xl font-semibold text-gray-900 tracking-tight">
               کتاب‌خانه
-            </span>
+            </span> */}
           </a>
 
           {/* Desktop links*/}

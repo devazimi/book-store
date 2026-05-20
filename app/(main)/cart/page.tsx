@@ -1,4 +1,5 @@
-import { getCart } from "../actions/cart";
+// import { getCart } from "../actions/cart";
+import { getCart } from "@/app/actions/cart";
 import CartPageComponent from "@/components/CartPage/CartPageComponent";
 
 export default async function getCartData() {

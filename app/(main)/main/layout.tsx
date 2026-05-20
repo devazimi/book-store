@@ -36,7 +36,7 @@ export default function HomePageLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-300">
+    <div className="min-h-screen bg-white">
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-h-screen">
