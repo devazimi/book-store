@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { CartDataItems, NavbarProps } from "@/types/propsType/type";
 import SearchBox from "./SearchBox";
@@ -8,7 +8,6 @@ import Profile from "./Profile";
 
 export default function Navbar({ data }: NavbarProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const navItems = [
     { href: "/", label: "خانه" },
@@ -25,9 +24,9 @@ export default function Navbar({ data }: NavbarProps) {
   const user = data?.session?.user;
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-xl border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-white shadow-xl border-b border-gray-100 mb-10">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-        <div className="flex items-center h-16 md:h-20 gap-4 md:gap-6 lg:gap-10">
+        <div className="flex items-center h-16 md:h-20 gap-4 md:gap-6 lg:gap-10 justify-center">
           {/* Logo*/}
           <a href="#" className="flex items-center gap-2.5 flex-shrink-0 group">
             <div className="w-10 h-10 bg-[#4b7995] rounded-2xl flex items-center justify-center group-hover:bg-gray-800 transition-colors">

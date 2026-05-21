@@ -9,7 +9,7 @@ export default async function RootLayout({
   const data = await getNavbardata();
 
   return (
-      <div className="bg-gray-300">
+      <div className="bg-white">
         <Navbar data={data} />
         <div>{children}</div>
       </div>

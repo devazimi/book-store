@@ -27,7 +27,7 @@ export default function CartPageComponent({
     // container
     <div className="max-w-[900px] w-full flex flex-col sm:flex-col mx-auto justify-between lg:flex-row md:flex-row px-4 lg:px-0 m-10 gap-8">
       {/* items box */}
-      <div className="flex flex-col gap-10 justify-center  lg:w-2/3 md:w-2/3 w-full ">
+      <div className="flex flex-col gap-10 justify-center lg:w-2/3 md:w-2/3 w-full ">
         <div className="flex flex-row gap-2 items-center self-start mr-0 ml-auto border-b-3 border-[#4b7995] p-2">
           <h1 className=" text-[#4b7995] text-xl">سبد خرید</h1>
           <h1 className=" text-white text-xl rounded-lg bg-[#4b7995] px-1">
