@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  username  String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt @default(now())
+  id               String     @id @default(cuid())
+  email            String     @unique
+  username         String     @unique
+  password         String
+  defaultAddress   String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt @default(now())
 
-  cart      Cart?
-  orders    Order[]
+  cart             Cart?
+  orders           Order[]
 }
 
 model Cart {
@@ -41,14 +42,15 @@ model CartItem {
 }
 
 model Order {
-  id        String   @id @default(cuid())
-  userId    String
+  id          String   @id @default(cuid())
+  userId      String
   totalPrice  Float
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
+  status      String   @default("pending")
+  address     String
+  createdAt   DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id])
-  items     OrderItem[]
+  user        User     @relation(fields: [userId], references: [id])
+  items       OrderItem[]
 }
 
 model OrderItem {

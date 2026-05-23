@@ -45,3 +45,12 @@ export interface NavbarProps {
 export interface ProfileProps {
   user: userSession | undefined;
 }
+
+export interface CheckoutPageProps {
+  cartItems: BookType[];
+  cart: {
+    data: {
+      items: CartDataItems[];
+    };
+  };
+}

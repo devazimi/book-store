@@ -1,8 +1,7 @@
-// import { getCart } from "../actions/cart";
 import { getCart } from "@/app/actions/cart";
 import CartPageComponent from "@/components/CartPage/CartPageComponent";
 
-export default async function getCartData() {
+export default async function CartPage() {
   const cartData = await getCart();
 
   console.log("cart data : ", cartData?.data);
@@ -28,8 +27,8 @@ export default async function getCartData() {
     }),
   );
 
-  console.log("cart items: ", cartItemsWithBooks);
-  console.log('quantity: ', cartData.data.items.map(q => q.quantity))
+  // console.log("cart items: ", cartItemsWithBooks);
+  // console.log('quantity: ', cartData.data.items.map(q => q.quantity))
 
   return (
     <CartPageComponent cartItems={cartItemsWithBooks} cartData={cartData} />
