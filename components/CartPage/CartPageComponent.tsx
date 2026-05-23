@@ -23,6 +23,14 @@ export default function CartPageComponent({
 
   const cartPriceToman = dollarToToman(cartPriceDollar);
 
+  const cartItemsPrice = cartData.data.items.map(item => {
+    console.log('item price: ' ,item.itemPrice);
+  });
+
+  console.log("cart total price: ", cartData.data.cartPrice)
+
+  cartItemsPrice;
+
   return (
     // container
     <div className="max-w-[900px] w-full flex flex-col sm:flex-col mx-auto justify-between lg:flex-row md:flex-row px-4 lg:px-0 m-10 gap-8">
@@ -137,6 +145,7 @@ export default function CartPageComponent({
         <button className="w-full h-12 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all focus:bg-red-800">
           تایید و تکمیل سفارش
         </button>
+        {cartData.data.cartPrice}
       </div>
     </div>
   );

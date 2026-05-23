@@ -20,6 +20,7 @@ export interface CartDataItems {
   cartId: string;
   bookId: string;
   quantity: number;
+  itemPrice: number;
 }
 
 export interface CartPageProps {
@@ -27,6 +28,7 @@ export interface CartPageProps {
   cartData: {
     data: {
       items: CartDataItems[];
+      cartPrice: number;
     };
   };
 }

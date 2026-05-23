@@ -5,6 +5,33 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+export async function updateCartPrice(cartId: string) {
+  const cart = await prisma.cart.findUnique({
+    where: { id: cartId },
+  });
+
+  if (!cart) {
+    throw new Error("no cart found");
+  }
+
+  const cartItems = await prisma.cartItem.findMany({
+    where: { cartId: cart.id },
+  });
+
+  if (!cartItems) {
+    throw new Error("no cartItems found");
+  }
+
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.itemPrice, 0);
+
+  const updateCart = await prisma.cart.update({
+    where: { id: cartId },
+    data: { cartPrice: totalPrice },
+  });
+
+  return updateCart;
+}
+
 export async function addToCart(bookId: string) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,6 +41,22 @@ export async function addToCart(bookId: string) {
     }
 
     console.log(session?.user?.id);
+
+    const getBook = async () => {
+      try {
+        const baseUrl = process.env.base_url;
+        const res = await fetch(`${baseUrl}/api/books/${bookId}`);
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error("book not found");
+        }
+        return data;
+      } catch (err) {
+        console.error("error: ", err);
+      }
+    };
+
+    const book = await getBook();
 
     let cart = await prisma.cart.findUnique({
       where: {
@@ -39,15 +82,25 @@ export async function addToCart(bookId: string) {
     if (cartItem) {
       cartItem = await prisma.cartItem.update({
         where: { id: cartItem.id },
-        data: { quantity: cartItem.quantity + 1 },
+        data: {
+          quantity: cartItem.quantity + 1,
+          itemPrice: book.price * (cartItem.quantity + 1),
+        },
       });
     }
 
     if (!cartItem) {
       cartItem = await prisma.cartItem.create({
-        data: { cartId: cart.id, bookId: bookId, quantity: 1 },
+        data: {
+          cartId: cart.id,
+          bookId: bookId,
+          quantity: 1,
+          itemPrice: book.price,
+        },
       });
     }
+
+    await updateCartPrice(cart.id);
 
     revalidatePath(`/main/${bookId}`);
     return { success: true };
@@ -78,7 +131,14 @@ export async function getCart() {
       throw new Error("سبد خرید ایجاد نشده است");
     }
 
-    return { success: true, data: cart };
+    await updateCartPrice(cart.id);
+
+    const updatedCart = await prisma.cart.findUnique({
+      where: { id: cart.id },
+      include: { items: true },
+    });
+
+    return { success: true, data: updatedCart };
   } catch (err) {
     console.log("خطا در دریافت سبد خرید: ", err);
     console.error("get cart err: ", err);
@@ -118,8 +178,14 @@ export async function incrementQuantity(bookId: string) {
       where: {
         id: cartItem.id,
       },
-      data: { quantity: cartItem.quantity + 1 },
+      data: {
+        quantity: cartItem.quantity + 1,
+        itemPrice:
+          (cartItem.itemPrice / cartItem.quantity) * (cartItem.quantity + 1),
+      },
     });
+
+    await updateCartPrice(cart.id);
 
     revalidatePath("/cart");
     return { success: true, quantityUpdate };
@@ -154,12 +220,18 @@ export async function decrementQuantity(bookId: string) {
 
     const quantityUpdate = await prisma.cartItem.update({
       where: { id: cartItem.id },
-      data: { quantity: cartItem.quantity - 1 },
+      data: {
+        quantity: cartItem.quantity - 1,
+        itemPrice:
+          (cartItem.itemPrice / cartItem.quantity) * (cartItem.quantity - 1),
+      },
     });
 
     if (quantityUpdate.quantity === 0) {
       await prisma.cartItem.delete({ where: { id: cartItem.id } });
     }
+
+    await updateCartPrice(cart.id);
 
     revalidatePath("/cart");
     return { success: true, quantityUpdate };
