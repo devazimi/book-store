@@ -24,6 +24,7 @@ model Cart {
   id        String   @id @default(cuid())
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
+  cartPrice Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -31,12 +32,13 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
-  cartId    String   
-  bookId    String
-  quantity  Int      @default(1)
+  id           String   @id @default(cuid())
+  cartId       String   
+  bookId       String
+  quantity     Int      @default(1)
+  itemPrice    Float    @default(1)
 
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cart         Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   @@unique([cartId, bookId])
 }
