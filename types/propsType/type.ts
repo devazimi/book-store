@@ -58,3 +58,14 @@ export interface CheckoutPageProps {
     } | null;
   } | null;
 }
+
+export interface OrderPageProps {
+  user: userSession;
+  order: {
+    id: string;
+    totalPrice: number;
+    status: string;
+    address: string;
+    createdAt: string;
+  };
+}

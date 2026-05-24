@@ -20,19 +20,13 @@ export async function addToOrder(cartId: string, address: string) {
       throw new Error("no cart found");
     }
 
-    let order = await prisma.order.findUnique({
-      where: { userId: session?.user.id },
+    const order = await prisma.order.create({
+      data: {
+        userId: session.user.id,
+        totalPrice: cart.cartPrice,
+        address: address,
+      },
     });
-
-    if (!order) {
-      order = await prisma.order.create({
-        data: {
-          userId: session.user.id,
-          totalPrice: cart.cartPrice,
-          address: address,
-        },
-      });
-    }
 
     return order;
   } catch (err) {
