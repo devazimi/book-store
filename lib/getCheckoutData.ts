@@ -4,31 +4,34 @@ export async function getCheckoutData() {
   try {
     const cart = await getCart();
 
-    if (!cart) {
-      throw new Error("اطلاعات سبد خرید برای پرداخت موجود نمی باشد");
+    if (!cart || !cart.data) {
+      return { cart: null, cartItems: [] };
     }
 
     const cartItems = await Promise.all(
       cart.data.items.map(async (item) => {
         try {
-          const baseUrl = process.env.base_url;  
+          const baseUrl = process.env.base_url;
           const res = await fetch(`${baseUrl}/api/books/${item.bookId}`);
           if (!res.ok) {
-            throw new Error("اطلاعات کتاب برای پرداخت موجود نمی باشد");
+            console.error("book not found: ", item.bookId);
+            return null;
           }
           const data = await res.json();
 
           return data;
-          // setCartDataWithItems(data);
-          // setLoading(false);
         } catch (err) {
           console.error("error fetching items at checkout: ", err);
+          return null;
         }
       }),
     );
 
-    return { cartItems, cart };
+    const validCartItems = cartItems.filter((item) => item.id !== null);
+
+    return { cart, cartItems: validCartItems };
   } catch (err) {
     console.error("error fetching cart at checkout: ", err);
+    return { cart: null, cartItems: [] };
   }
 }

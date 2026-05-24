@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLogic } from "@/hooks/useLogic";
-import { BookType } from "@/types/bookType/type";
 import { CheckoutPageProps } from "@/types/propsType/type";
-import { useState } from "react";
+import { addToOrder } from "@/app/actions/order";
+import { useRouter } from "next/navigation";
 
 import { BsBack } from "react-icons/bs";
 import { FaBookOpen, FaMapMarkerAlt, FaTruck } from "react-icons/fa";
@@ -18,41 +19,45 @@ const days = [
   { id: 7, day: "جمعه", price: "76,000" },
 ];
 
-export default function CheckoutPageComponent({ cartItems, cart }: CheckoutPageProps) {
-  const [address, setAddress] = useState('');
-  const [confirmAddress, setConfirmAddress] = useState('')
+export default function CheckoutPageComponent({
+  cartItems,
+  cart,
+}: CheckoutPageProps) {
+  const [address, setAddress] = useState("");
+  const [confirmAddress, setConfirmAddress] = useState("");
   const [typingAddress, setTypingAddress] = useState(false);
 
   const { dollarToToman } = useLogic();
 
-  // checkout price
-  const cartPrice = cartItems.reduce((sum: number, item: BookType) => {
-    const currentItem = cart.data.items.find(
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!cart || !cart.data || !cartItems) {
+      router.push("/cart");
+    }
+  }, [cart, cartItems, router]);
+
+  if (!cart || !cart.data || !cartItems) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>در حال انتقال به سبد خرید...</p>
+      </div>
+    );
+  }
+
+  const checkoutPriceToman = dollarToToman(cart?.data?.cartPrice);
+
+  // checkout items length
+  const checkoutItemsLength = cartItems.reduce((sum, item) => {
+    const currentItem = cart?.data?.items.find(
       (book) => book.bookId === item.id,
     );
     if (!currentItem) {
       return sum;
     }
-    const itemPrice = item.price * currentItem.quantity;
-    return (sum += itemPrice);
-  }, 0);
-
-  const checkoutPriceToman = dollarToToman(cartPrice);
-
-  // checkout items length
-  const checkoutItemsLength = cartItems.reduce((sum, item)=> {
-    const currentItem = cart.data.items.find(book => book.bookId === item.id);
-    if(!currentItem){
-      return sum;
-    }
     const itemLength = currentItem.quantity;
-    return sum += itemLength;
-  },0)
-  
-  console.log('itemsLength: ', checkoutItemsLength)
-  console.log("cartPrice: ", cartPrice);
-  console.log("cart data with items: ", cartItems);
-  console.log("cartItems: ", cart.data.items);
+    return (sum += itemLength);
+  }, 0);
 
   return (
     // container
@@ -152,7 +157,16 @@ export default function CheckoutPageComponent({ cartItems, cart }: CheckoutPageP
               {checkoutPriceToman} تومان
             </p>
           </div>
-          <button className="w-full h-12 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all focus:bg-red-800">
+          <button
+            className="w-full h-12 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all focus:bg-red-800"
+            onClick={() => {
+              const cartId = cart?.data?.id;
+              if (cartId && address) {
+                addToOrder(cartId, address);
+                router.push("/order");
+              }
+            }}
+          >
             پرداخت
           </button>
         </div>

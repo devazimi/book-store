@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { decrementQuantity, incrementQuantity } from "@/app/actions/cart";
 import { useLogic } from "@/hooks/useLogic";
 import { BookType } from "@/types/bookType/type";
@@ -12,24 +13,11 @@ export default function CartPageComponent({
   cartItems,
   cartData,
 }: CartPageProps) {
+  const router = useRouter();
+
   const { dollarToToman, toPersianNumber } = useLogic();
 
-  const cartPriceDollar = cartItems.reduce((sum: number, item: BookType) => {
-    const validItem = cartData.data.items.find((c) => c.bookId === item.id);
-    if (!validItem) return sum;
-    const itemPrice = item.price * validItem.quantity;
-    return sum + itemPrice;
-  }, 0);
-
-  const cartPriceToman = dollarToToman(cartPriceDollar);
-
-  const cartItemsPrice = cartData.data.items.map(item => {
-    console.log('item price: ' ,item.itemPrice);
-  });
-
-  console.log("cart total price: ", cartData.data.cartPrice)
-
-  cartItemsPrice;
+  const cartPriceToman = dollarToToman(cartData.data.cartPrice);
 
   return (
     // container
@@ -50,11 +38,13 @@ export default function CartPageComponent({
             return null;
           }
           const itemQuantity = validItem.quantity;
-          const itemPriceDollar = item.price * itemQuantity;
-          const itemPriceToman = dollarToToman(itemPriceDollar);
+          const itemPriceToman = dollarToToman(validItem.itemPrice);
 
           return (
-            <div key={item.id} className="flex flex-row gap-5 p-6 border-b-1 border-gray-300">
+            <div
+              key={item.id}
+              className="flex flex-row gap-5 p-6 border-b-1 border-gray-300"
+            >
               <div className="flex flex-col gap-10 justify-center items-center">
                 {
                   // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
@@ -142,10 +132,14 @@ export default function CartPageComponent({
             {cartPriceToman} تومان
           </p>
         </div>
-        <button className="w-full h-12 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all focus:bg-red-800">
+        <button
+          className="w-full h-12 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all focus:bg-red-800"
+          onClick={() => {
+            router.push("/cart/checkout");
+          }}
+        >
           تایید و تکمیل سفارش
         </button>
-        {cartData.data.cartPrice}
       </div>
     </div>
   );

@@ -52,7 +52,9 @@ export interface CheckoutPageProps {
   cartItems: BookType[];
   cart: {
     data: {
+      id: string;
       items: CartDataItems[];
-    };
-  };
+      cartPrice: number;
+    } | null;
+  } | null;
 }
