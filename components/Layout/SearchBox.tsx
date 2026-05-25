@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SearchBox() {
   const [query, setQuery] = useState("");
@@ -8,6 +9,8 @@ export default function SearchBox() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   const searchOpenRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +58,14 @@ export default function SearchBox() {
 
     return () => clearTimeout(timer);
   }, [query]);
+
+  // route to book page
+  const handleClickSearchResultItem = (id: string) => {
+    router.push(`/main/${id}`);
+    setSearchOpen(false);
+    setShowDropdown(false);
+    setQuery("");
+  };
 
   return (
     <div ref={searchOpenRef} className="hidden sm:flex flex-1 max-w-md">
@@ -110,6 +121,7 @@ export default function SearchBox() {
                 (item: { id: string; title: string; author: string }) => (
                   <div
                     key={item.id}
+                    onClick={() => handleClickSearchResultItem(item.id)}
                     className="flex flex-row gap-2 p-2 border-b-1 border-gray-200 hover:cursor-pointer"
                   >
                     <h1 className="text-sm text-gray-600 font-bold hover:text-gray-700 ">

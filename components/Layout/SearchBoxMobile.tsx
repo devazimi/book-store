@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SearchBoxMobile() {
   const [query, setQuery] = useState("");
@@ -8,6 +9,8 @@ export default function SearchBoxMobile() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -61,6 +64,14 @@ export default function SearchBoxMobile() {
 
     return () => clearTimeout(timer);
   }, [query, isLoading]);
+
+  // route to book page
+  const handleClickSearchResultItem = (id: string) => {
+    router.push(`/main/${id}`);
+    setSearchOpen(false);
+    setShowDropdown(false);
+    setQuery("");
+  };
 
   return (
     <>
@@ -142,6 +153,7 @@ export default function SearchBoxMobile() {
                     (item: { id: string; title: string; author: string }) => (
                       <div
                         key={item.id}
+                        onClick={() => handleClickSearchResultItem(item.id)}
                         className="flex flex-row gap-2 p-2 border-b-1 border-gray-200 hover:cursor-pointer"
                       >
                         <h1 className="text-sm text-gray-600 font-bold hover:text-gray-700 ">
