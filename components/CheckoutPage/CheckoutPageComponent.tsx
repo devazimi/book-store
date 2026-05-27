@@ -7,17 +7,7 @@ import { addToOrder } from "@/app/actions/order";
 import { useRouter } from "next/navigation";
 
 import { BsBack } from "react-icons/bs";
-import { FaBookOpen, FaMapMarkerAlt, FaTruck } from "react-icons/fa";
-
-const days = [
-  { id: 1, day: "شنبه", price: "36,000" },
-  { id: 2, day: "یکشنبه", price: "36,000" },
-  { id: 3, day: "دوشنبه", price: "36,000" },
-  { id: 4, day: "سه شنبه", price: "36,000" },
-  { id: 5, day: "چهارشنبه", price: "36,000" },
-  { id: 6, day: "پنجشنبه", price: "36,000" },
-  { id: 7, day: "جمعه", price: "76,000" },
-];
+import { FaBookOpen, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function CheckoutPageComponent({
   cartItems,
@@ -26,6 +16,7 @@ export default function CheckoutPageComponent({
   const [address, setAddress] = useState("");
   const [confirmAddress, setConfirmAddress] = useState("");
   const [typingAddress, setTypingAddress] = useState(false);
+  const [isCompleted, setIsCompleted] = useState<boolean | null>(null);
 
   const { dollarToToman } = useLogic();
 
@@ -80,7 +71,7 @@ export default function CheckoutPageComponent({
       {/* main */}
       <div className="flex flex-col md:flex-row w-full justify-center-items-center gap-4">
         {/* info */}
-        <div className="flex flex-col md:w-[900px] border-1 border-gray-200 rounded-md p-4 gap-10">
+        <div className="flex flex-col md:w-[900px] justify-center border-1 border-gray-200 rounded-md p-4 gap-10">
           {/* address */}
           <div className="border-2 border-gray-200 rounded-md p-4">
             <div className="flex flex-row justify-between px-2 gap-3 text-sm text-blue-500">
@@ -89,7 +80,7 @@ export default function CheckoutPageComponent({
             </div>
             {!typingAddress && address !== "" ? (
               <div
-                className="flex items-center border-1 border-gray-300 bg-gray-200 h-12 rounded-sm p-3 text-xs w-150 mt-5"
+                className={`flex items-center border-1 border-gray-300 ${isCompleted === true ? "bg-green-100" : isCompleted === false ? "bg-red-100" : "bg-gray-100"} bg-gray-200 h-12 rounded-sm p-3 text-xs w-150 mt-5`}
                 onClick={() => {
                   setTypingAddress(true);
                 }}
@@ -101,7 +92,7 @@ export default function CheckoutPageComponent({
                 <input
                   type="text"
                   placeholder="آدرس محل سکونت خود را بنویسید..."
-                  className="border-1 border-gray-300 h-12 rounded-sm p-3 text-xs w-150 "
+                  className={`border-1 border-gray-300 ${isCompleted === true ? "bg-green-100" : isCompleted === false ? "bg-red-100" : "bg-gray-100"} h-12 rounded-sm p-3 text-xs w-150`}
                   value={address}
                   onChange={(e) => {
                     setAddress(e.target.value);
@@ -112,6 +103,7 @@ export default function CheckoutPageComponent({
                   <button
                     className="w-42 h-12 bg-green-700 text-white rounded-md p-1"
                     onClick={() => {
+                      setIsCompleted(true);
                       setConfirmAddress(address);
                       setTypingAddress(false);
                     }}
@@ -121,24 +113,6 @@ export default function CheckoutPageComponent({
                 )}
               </div>
             )}
-          </div>
-          {/* date */}
-          <div className="border-2 border-gray-200 rounded-md p-4">
-            <div className="flex flex-row justify-between px-2 gap-3 text-sm text-blue-500">
-              <p className="text-sm text-blue-500">انتخاب و تعیین زمان ارسال</p>
-              <FaTruck />
-            </div>
-            <div className="flex gap-3 mt-5">
-              {days.map((d: { id: number; day: string; price: string }) => (
-                <div
-                  key={d.id}
-                  className="flex flex-col w-20 h-25 justify-center items-center border-2 border-gray-300 rounded-sm gap-4"
-                >
-                  <p className="font-bold text-md text-gray-700">{d.day}</p>
-                  <p>{d.price}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
         {/* cart box */}
@@ -162,8 +136,10 @@ export default function CheckoutPageComponent({
             onClick={() => {
               const cartId = cart?.data?.id;
               if (cartId && address) {
-                addToOrder(cartId, address);
+                addToOrder(cartId, confirmAddress);
                 router.push("/order");
+              } else {
+                setIsCompleted(false);
               }
             }}
           >

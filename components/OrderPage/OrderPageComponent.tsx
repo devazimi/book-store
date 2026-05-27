@@ -1,3 +1,5 @@
+"use client";
+
 import { useLogic } from "@/hooks/useLogic";
 import { OrderPageProps } from "@/types/propsType/type";
 import {
@@ -6,7 +8,10 @@ import {
   FiClock,
   FiDollarSign,
   FiCalendar,
+  FiDelete,
 } from "react-icons/fi";
+
+import { deleteOrder } from "@/app/actions/order";
 
 export default function OrderPageComponent({ user, order }: OrderPageProps) {
   const { dollarToToman } = useLogic();
@@ -46,10 +51,17 @@ export default function OrderPageComponent({ user, order }: OrderPageProps) {
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-50 to-white px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
+        <div className="flex justify-between bg-gradient-to-r from-gray-50 to-white px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
           <h2 className="text-sm sm:text-base font-semibold text-gray-800">
             اطلاعات سفارش
           </h2>
+          <button
+            className="flex gap-3 items-center text-xs text-white bg-red-500 p-2 rounded-full hover:cursor-pointer hover:shadow-md hover:bg-red-600 transition-all"
+            onClick={() => deleteOrder(order.id)}
+          >
+            <p>حذف سفارش</p>
+            <FiDelete />
+          </button>
         </div>
 
         {/* Content */}
