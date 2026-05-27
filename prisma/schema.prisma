@@ -45,7 +45,7 @@ model CartItem {
 
 model Order {
   id          String   @id @default(cuid())
-  userId      String   @unique
+  userId      String   
   totalPrice  Float
   status      String   @default("pending")
   address     String

@@ -29,8 +29,8 @@ export interface CartPageProps {
     data: {
       items: CartDataItems[];
       cartPrice: number;
-    };
-  };
+    } | null;
+  } | null;
 }
 
 export interface NavbarProps {
@@ -59,13 +59,15 @@ export interface CheckoutPageProps {
   } | null;
 }
 
-export interface OrderPageProps {
+export interface OrderType {
+  id: string;
+  totalPrice: number;
+  status: string;
+  address: string;
+  createdAt: string;
+}
+
+export interface OrdersPageProps {
   user: userSession;
-  order: {
-    id: string;
-    totalPrice: number;
-    status: string;
-    address: string;
-    createdAt: string;
-  };
+  orders: OrderType[];
 }

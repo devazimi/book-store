@@ -21,7 +21,7 @@ export async function addToOrder(cartId: string, address: string) {
     redirect("/main");
   }
 
-  const order = await prisma.order.create({
+  await prisma.order.create({
     data: {
       userId: session.user.id,
       totalPrice: cart.cartPrice,
@@ -29,29 +29,33 @@ export async function addToOrder(cartId: string, address: string) {
     },
   });
 
-  revalidatePath("/order");
-  return order;
+  await prisma.cart.delete({
+    where: { id: cartId },
+  });
+
+  revalidatePath("/orders");
 }
 
-export async function getOrder() {
+export async function getOrders() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user.id) {
     redirect("/login");
   }
 
-  const order = await prisma.order.findUnique({
+  const orders = await prisma.order.findMany({
+    // where: { userId: session.user.id },
     where: { userId: session.user.id },
   });
 
-  if (!order) {
+  if (!orders) {
     redirect("/main");
   }
 
-  return {
+  return orders.map((order) => ({
     ...order,
     createdAt: order.createdAt.toString(),
-  };
+  }));
 }
 
 export async function deleteOrder(orderId: string) {
@@ -73,6 +77,5 @@ export async function deleteOrder(orderId: string) {
     where: { id: order.id },
   });
 
-  revalidatePath("/order");
-  redirect("/main");
+  revalidatePath("/orders");
 }

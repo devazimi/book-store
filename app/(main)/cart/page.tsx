@@ -1,8 +1,13 @@
 import { getCart } from "@/app/actions/cart";
 import CartPageComponent from "@/components/CartPage/CartPageComponent";
+import { redirect } from "next/navigation";
 
 export default async function CartPage() {
   const cartData = await getCart();
+
+  if (!cartData || !cartData?.data || !cartData?.data?.items) {
+    redirect("/main");
+  }
 
   console.log("cart data : ", cartData?.data);
   console.log("cart data2: ", cartData?.data.items);
@@ -12,7 +17,7 @@ export default async function CartPage() {
   }
 
   const cartItemsWithBooks = await Promise.all(
-    cartData.data.items.map(async (item) => {
+    cartData?.data.items.map(async (item) => {
       try {
         const baseUrl = process.env.base_url;
         const res = await fetch(`${baseUrl}/api/books/${item.bookId}`);
@@ -26,9 +31,6 @@ export default async function CartPage() {
       }
     }),
   );
-
-  // console.log("cart items: ", cartItemsWithBooks);
-  // console.log('quantity: ', cartData.data.items.map(q => q.quantity))
 
   return (
     <CartPageComponent cartItems={cartItemsWithBooks} cartData={cartData} />

@@ -1,4 +1,4 @@
-import { getOrder } from "@/app/actions/order";
+import { getOrders } from "@/app/actions/order";
 import OrderPageComponent from "@/components/OrderPage/OrderPageComponent";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
@@ -10,10 +10,10 @@ export default async function OrderPage() {
     return "no user";
   }
 
-  const order = await getOrder();
+  const orders = await getOrders();
 
   const user = session.user;
 
-  console.log("order: ", order);
-  return <OrderPageComponent user={user} order={order} />;
+  console.log("order: ", orders);
+  return <OrderPageComponent user={user} orders={orders} />;
 }

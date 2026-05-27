@@ -137,7 +137,7 @@ export default function CheckoutPageComponent({
               const cartId = cart?.data?.id;
               if (cartId && address) {
                 addToOrder(cartId, confirmAddress);
-                router.push("/order");
+                router.push("/orders");
               } else {
                 setIsCompleted(false);
               }

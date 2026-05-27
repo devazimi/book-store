@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function updateCartPrice(cartId: string) {
   const cart = await prisma.cart.findUnique({
@@ -111,11 +112,10 @@ export async function addToCart(bookId: string) {
 }
 
 export async function getCart() {
-  try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      throw new Error("کاربر وجود ندارد");
+      redirect('/login')
     }
 
     console.log(session?.user.id);
@@ -128,7 +128,7 @@ export async function getCart() {
     });
 
     if (!cart) {
-      throw new Error("سبد خرید ایجاد نشده است");
+      redirect('/main')
     }
 
     await updateCartPrice(cart.id);
@@ -139,10 +139,6 @@ export async function getCart() {
     });
 
     return { success: true, data: updatedCart };
-  } catch (err) {
-    console.log("خطا در دریافت سبد خرید: ", err);
-    console.error("get cart err: ", err);
-  }
 }
 
 export async function incrementQuantity(bookId: string) {
