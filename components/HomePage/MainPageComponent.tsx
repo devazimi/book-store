@@ -3,14 +3,11 @@
 import { useRouter } from "next/navigation";
 
 import { BookType } from "@/types/bookType/type";
-
-export interface MainPageComponentProps {
-  books: BookType[];
-}
+import { MainPageComponentProps } from "@/types/propsType/type";
 
 export default function MainPageComponent({ books }: MainPageComponentProps) {
   const router = useRouter();
-  const handleClickBook = (id: number) => {
+  const handleClickBook = (id: string) => {
     router.push(`/main/${id}`);
   };
 
@@ -33,7 +30,8 @@ export default function MainPageComponent({ books }: MainPageComponentProps) {
               >
                 {/* Book Cover Image */}
                 <img
-                  src="/images/bookImage.jpg"
+                  // src="/images/bookImage.jpg"
+                  src={book.cover_image}
                   alt={`${book.title} cover`}
                   className="w-full h-full object-cover"
                   loading="lazy"

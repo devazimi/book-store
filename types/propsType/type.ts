@@ -15,6 +15,10 @@ export interface BookPageProps {
   user: userSession | undefined;
 }
 
+export interface MainPageComponentProps {
+  books: BookType[];
+}
+
 export interface CartDataItems {
   id: string;
   cartId: string;

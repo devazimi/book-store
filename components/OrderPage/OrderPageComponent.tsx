@@ -1,7 +1,7 @@
 "use client";
 
 import { useLogic } from "@/hooks/useLogic";
-import { OrdersPageProps, OrderType } from "@/types/propsType/type";
+import { OrdersPageProps } from "@/types/propsType/type";
 import {
   FiUser,
   FiMapPin,
