@@ -17,7 +17,9 @@ export default function CartPageComponent({
 
   const { dollarToToman, toPersianNumber } = useLogic();
 
-  const cartPriceToman = dollarToToman(cartData.data.cartPrice);
+  const cartPriceToman = cartData?.data?.cartPrice
+    ? dollarToToman(cartData.data.cartPrice)
+    : 0;
 
   return (
     // container
@@ -31,7 +33,7 @@ export default function CartPageComponent({
           </h1>
         </div>
         {cartItems.map((item: BookType) => {
-          const validItem = cartData.data.items.find(
+          const validItem = cartData?.data?.items.find(
             (q) => q.bookId === item.id,
           );
           if (!validItem) {
